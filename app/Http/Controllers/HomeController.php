@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $events = User::find(Auth::id())->first()->events;
+        $events = User::find(Auth::id())->events;
         return view('home', compact('events'));
     }
 }
