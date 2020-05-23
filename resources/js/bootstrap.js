@@ -8,8 +8,10 @@ window._ = require('lodash');
 
 try {
     window.Popper = require('popper.js').default;
+    window.moment = require('moment');
     window.$ = window.jQuery = require('jquery');
     window.datepicker = require('bootstrap-datepicker');
+    window.fullcalendar = require('fullcalendar');
 
     require('bootstrap');
 } catch (e) {}

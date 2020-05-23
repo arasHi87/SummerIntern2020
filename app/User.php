@@ -40,8 +40,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function Calender()
+    public function events()
     {
-        return $this->hasOne('App\\calender');
+        return $this->hasMany('App\Event');
     }
 }

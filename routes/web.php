@@ -21,4 +21,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/calender/add', 'CalenderController@add')->name('calender.add');
+Route::post('/event/add', 'EventController@add')->name('event.add');
+Route::post('/event/update', 'EventController@update')->name('event.update');
