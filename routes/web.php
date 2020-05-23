@@ -23,3 +23,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/event/add', 'EventController@add')->name('event.add');
 Route::post('/event/update', 'EventController@update')->name('event.update');
+Route::post('/event/delete', 'EventController@delete')->name('event.delete');

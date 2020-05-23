@@ -54,8 +54,8 @@
                 </div>
             </div>
              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id='event_edit_submit'>Submit</button>
+                <button type="button" class="btn btn-danger" id="delete_event" style="display: none;">Delete</button>
+                <button type="submit" class="btn btn-primary" id="event_edit_submit">Submit</button>
             </div>
         </div>
     </div>

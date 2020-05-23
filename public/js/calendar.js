@@ -8,10 +8,12 @@ $(document).ready(function () {
         },
         dayClick: function(data, event, view) {
             $('h5').text('Add event');
+            $('#delete_event').hide();
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
             $('h5').text('Update event')
+            $('#delete_event').show();
             $('input[name=event_id]').val(data._id);
             $('input[name=title]').val(data.title);
             $('input[name=start_time]').val(data.start._i);
@@ -80,5 +82,27 @@ $(document).ready(function () {
                 $('.invalid-feedback').show();
             }
         });
+    });
+
+    $("#delete_event").on('click', function () {
+        var event_id = $('input[name=event_id]').val()
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: '/event/delete',
+            data: {
+                event_id: event_id,
+            },
+            success: function (res) {
+                $('#calendar').fullCalendar('removeEvents', event_id);
+                $('#EditEventModal').modal('toggle');
+            }
+        })
     });
 });

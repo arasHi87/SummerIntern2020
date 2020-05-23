@@ -75,4 +75,32 @@ class EventController extends Controller
             'id' => $request->input('event_id'),
         ), 200);
     }
+
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'event_id' => ['required', 'integer'],
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json(array(
+                'errors' => $validator->getMessageBag()->toArray(),
+            ), 400);
+        }
+
+        $event = Event::findOrFail((int)$request->input('event_id'));
+
+        if ($event->user_id != Auth::id()) {
+            return Response::json(array(
+                'errors' => $validator->getMessageBag()->toArray(),
+            ), 400);
+        }
+
+        $event->delete();
+
+        return response()->json(array(
+            'success' => true,
+            'id' => $request->input('event_id'),
+        ), 200);
+    }
 }
