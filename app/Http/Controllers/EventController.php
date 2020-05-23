@@ -66,8 +66,8 @@ class EventController extends Controller
                 'title' => $request->input('title'),
                 'start_time' => $request->input('start_time'),
                 'end_time' => $request->input('end_time'),
-                'bg_color' => $request->input('text_color') ? $request->input('text_color') : '#FFFFFF',
-                'text_color' => $request->input('bg_color') ? $request->input('bg_color') : '#F44336',
+                'bg_color' => $request->input('bg_color') ? $request->input('bg_color') : '#FFFFFF',
+                'text_color' => $request->input('text_color') ? $request->input('text_color') : '#F44336',
             ]);
 
         return response()->json(array(
