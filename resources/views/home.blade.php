@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
 <!-- Css -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' rel='stylesheet' />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" rel="stylesheet" />
 
 <!-- Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-TW.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js" defer></script>
 <script src="{{ asset('js/calendar.js') }}" defer></script>
 
 @section('content')
@@ -23,31 +27,37 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <label for="title_lb" class="col-md-2 col-form-label text-md-left">title</label>
+                    <label for="title_lb" class="col-md-3 col-form-label text-md-left">title</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="title" maxlength="50" placeholder='Event title'>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="start_time_lb" class="col-md-2 col-form-label text-md-left">start</label>
+                    <label for="start_time_lb" class="col-md-3 col-form-label text-md-left">start</label>
                     <div class="col-md-8">
                         <input type='date' class="form-control datepicker" name="start_time">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="end_time_lb" class="col-md-2 col-form-label text-md-left">end</label>
+                    <label for="end_time_lb" class="col-md-3 col-form-label text-md-left">end</label>
                     <div class="col-md-8">
                         <input type='date' class="form-control datepicker" name="end_time">
                     </div>
                 </div>
-                 <div class="form-group row">
-                    <label for="bg_color" class="col-md-2 col-form-label text-md-left">bg color</label>
+                <div class="form-group row">
+                    <label for="notice" class="col-md-3 col-form-label text-md-left">notice</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="notice-day" placeholder="x;x;x;x days">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="bg_color" class="col-md-3 col-form-label text-md-left">bg color</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="bg_color" value="#F44336">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="text_color" class="col-md-2 col-form-label text-md-left">text color</label>
+                    <label for="text_color" class="col-md-3 col-form-label text-md-left">text color</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="text_color" value="#FFFFFF">
                     </div>
@@ -65,16 +75,16 @@
 <script>
     setTimeout(() => {
         @foreach($events as $event)
-        $('#calendar').fullCalendar('renderEvent', {
-            _id: "{{ strval($event->id) }}",
-            title: "{{ $event->title }}",
-            start: "{{ $event->start_time }}",
-            end: "{{ $event->end_time }}",
-            color: "{{ $event->bg_color }}",
-            textColor: "{{ $event->text_color }}"
-            },
-            true,
-        );
+            $('#calendar').fullCalendar('renderEvent', {
+                    _id: "{{ strval($event->id) }}",
+                    title: "{{ $event->title }}",
+                    start: "{{ $event->start_time }}",
+                    end: "{{ $event->end_time }}",
+                    color: "{{ $event->bg_color }}",
+                    textColor: "{{ $event->text_color }}"
+                },
+                true,
+            );
         @endforeach
     }, 1000);
 </script>
