@@ -33,6 +33,7 @@ $(document).ready(function () {
         var end_time = $('input[name=end_time]').val();
         var bg_color = $('input[name=bg_color]').val();
         var text_color = $('input[name=text_color]').val();
+        var notice_day = $('input[name=notice_day]').val();
         var edit_type = $('h5').text();
         var url ='';
 
@@ -59,6 +60,7 @@ $(document).ready(function () {
                 end_time: end_time,
                 bg_color: bg_color,
                 text_color: text_color,
+                notice_day: notice_day,
             },
             success: function (res) {
                 if (edit_type == 'Update event') {
