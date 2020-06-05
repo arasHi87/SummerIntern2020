@@ -6,6 +6,7 @@ use App\User;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,6 +23,7 @@ class EventController extends Controller
             'title' => ['required', 'max:50'],
             'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
+            'notice_day' => ['int', 'min:1', 'max:30'],
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +41,12 @@ class EventController extends Controller
         $event->bg_color = $request->input('bg_color') ? $request->input('bg_color') : '#F44336';
         $event->save();
 
+        $notice_day = $request->input('notice_day');
+
+        if ($notice_day) {
+            Redis::set('events_' . Auth::id() . ':' . $event->id, $notice_day);
+        }
+
         return response()->json(array(
             'success' => true,
             'id' => $event->id,
@@ -52,6 +60,7 @@ class EventController extends Controller
             'title' => ['required', 'max:50'],
             'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
+            'notice_day' => ['int', 'min:1', 'max:30'],
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +78,12 @@ class EventController extends Controller
                 'bg_color' => $request->input('bg_color') ? $request->input('bg_color') : '#FFFFFF',
                 'text_color' => $request->input('text_color') ? $request->input('text_color') : '#F44336',
             ]);
+
+        $notice_day = $request->input('notice_day');
+
+        if ($notice_day) {
+            Redis::set('events_' . Auth::id() . ':' . $request->input('event_id'), $notice_day);
+        }
 
         return response()->json(array(
             'success' => true,
@@ -88,6 +103,7 @@ class EventController extends Controller
             ), 400);
         }
 
+        // delete event
         $event = Event::findOrFail((int)$request->input('event_id'));
 
         if ($event->user_id != Auth::id()) {
@@ -97,6 +113,9 @@ class EventController extends Controller
         }
 
         $event->delete();
+
+        // delete redis notice
+        Redis::del('events_' . Auth::id() . ':' . $request->input('event_id'));
 
         return response()->json(array(
             'success' => true,

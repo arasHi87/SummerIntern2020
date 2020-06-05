@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 <!-- Css -->
+<link rel="stylesheet" href="https://unpkg.com/huebee@latest/dist/huebee.min.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' rel='stylesheet' />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" rel="stylesheet" />
 
 <!-- Script -->
+<script src="https://unpkg.com/huebee@latest/dist/huebee.pkgd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-TW.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js" defer></script>
 <script src="{{ asset('js/calendar.js') }}" defer></script>
@@ -45,21 +47,21 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="notice" class="col-md-3 col-form-label text-md-left">notice</label>
+                    <label for="notice_day_lb" class="col-md-3 col-form-label text-md-left">notice</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" name="notice-day" placeholder="x;x;x;x days">
+                        <input type="text" class="form-control" name="notice_day" placeholder="range 1-30">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="bg_color" class="col-md-3 col-form-label text-md-left">bg color</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" name="bg_color" value="#F44336">
+                        <input type="text" class="form-control" name="bg_color" value="#F44336" data-huebee>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="text_color" class="col-md-3 col-form-label text-md-left">text color</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" name="text_color" value="#FFFFFF">
+                        <input type="text" class="form-control" name="text_color" value="#FFFFFF" data-huebee>
                     </div>
                 </div>
             </div>
