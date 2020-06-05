@@ -1,16 +1,18 @@
 @extends('layouts.app')
 
-<!-- Css -->
-<link rel="stylesheet" href="https://unpkg.com/huebee@latest/dist/huebee.min.css" />
+@section('style')
+<link href="https://unpkg.com/huebee@latest/dist/huebee.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' rel='stylesheet' />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" rel="stylesheet" />
+@endsection
 
-<!-- Script -->
+@section('script')
 <script src="https://unpkg.com/huebee@latest/dist/huebee.pkgd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-TW.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js" defer></script>
 <script src="{{ asset('js/calendar.js') }}" defer></script>
+@endsection
 
 @section('content')
 <!-- calendar content -->
