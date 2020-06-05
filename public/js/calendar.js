@@ -9,6 +9,8 @@ $(document).ready(function () {
         dayClick: function(data, event, view) {
             $('h5').text('Add event');
             $('#delete_event').hide();
+            $('input[name=start_time]').val(data._d);
+            $('input[name=end_time]').val(data._d)
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
