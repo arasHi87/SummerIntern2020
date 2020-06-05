@@ -23,7 +23,7 @@ class EventController extends Controller
             'title' => ['required', 'max:50'],
             'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
-            'notice_day' => ['int', 'min:1', 'max:30'],
+            'notice_day' => ['int', 'min:0', 'max:30'],
         ]);
 
         if ($validator->fails()) {
@@ -60,7 +60,7 @@ class EventController extends Controller
             'title' => ['required', 'max:50'],
             'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
-            'notice_day' => ['int', 'min:1', 'max:30'],
+            'notice_day' => ['int', 'min:0', 'max:30'],
         ]);
 
         if ($validator->fails()) {
