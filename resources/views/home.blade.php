@@ -9,14 +9,14 @@
 
 @section('script')
 <script src="https://unpkg.com/huebee@latest/dist/huebee.pkgd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-TW.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js" defer></script>
-<script src="{{ asset('js/calendar.js') }}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.zh-TW.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+<script src="{{ asset('js/calendar.js') }}"></script>
 @endsection
 
 @section('content')
 <!-- calendar content -->
-<div id="calendar" style="margin: 0 5% 3% 5%;"></div>
+<div id="calendar" style="margin: 0 5% 3% 5%;" FullCalendar></div>
 
 <!-- date add modal -->
 <div class="modal fade" id="EditEventModal" tabindex="-1" role="dialog" aria-labelledby="EditEventModalLabel">
@@ -76,19 +76,35 @@
 </div>
 @stop
 
+@section('body-script')
 <script>
-    setTimeout(() => {
-        @foreach($events as $event)
-            $('#calendar').fullCalendar('renderEvent', {
-                    _id: "{{ strval($event->id) }}",
-                    title: "{{ $event->title }}",
-                    start: "{{ $event->start_time }}",
-                    end: "{{ $event->end_time }}",
-                    color: "{{ $event->bg_color }}",
-                    textColor: "{{ $event->text_color }}"
-                },
-                true,
-            );
-        @endforeach
-    }, 1000);
+    function waitUntil(waitFor, method) {
+        if (window[waitFor]) {
+            method();
+        } else {
+            setTimeout(() => {
+                waitUntil(waitFor, method);
+            }, 50);
+        }
+    }
+
+    waitUntil('$', () => {
+        $(document).ready(function () {
+            waitUntil('FullCalendar', () => {
+                @foreach($events as $event)
+                    $('#calendar').fullCalendar('renderEvent', {
+                            _id: "{{ strval($event->id) }}",
+                            title: "{{ $event->title }}",
+                            start: "{{ $event->start_time }}",
+                            end: "{{ $event->end_time }}",
+                            color: "{{ $event->bg_color }}",
+                            textColor: "{{ $event->text_color }}"
+                        },
+                        true,
+                    );
+                @endforeach
+            })
+        })
+    })
 </script>
+@stop
