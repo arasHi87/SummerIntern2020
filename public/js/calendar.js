@@ -99,7 +99,7 @@ $(document).ready(function () {
                 $('#EditEventModal').modal('toggle');
             },
             error: function (res) {
-
+                $('#event_edit_submit').attr("disabled", false);
                 res = JSON.parse(res.responseText);
                 error_span = '<span class="invalid-feedback" role="alert">meow<strong></strong></span>';
                 $.each(res.errors, function (key, value) {
