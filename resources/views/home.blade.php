@@ -78,6 +78,7 @@
 
 @section('body-script')
 <script>
+    notice_day_l = {};
     function waitUntil(waitFor, method) {
         if (window[waitFor]) {
             method();
@@ -92,6 +93,8 @@
         $(document).ready(function () {
             waitUntil('FullCalendar', () => {
                 @foreach($events as $event)
+                    notice_day_l["{{ strval($event->id) }}"] = "{{ $event->notice_day }}";
+
                     $('#calendar').fullCalendar('renderEvent', {
                             _id: "{{ strval($event->id) }}",
                             title: "{{ $event->title }}",

@@ -18,6 +18,7 @@ $(document).ready(function () {
             $('#delete_event').hide();
             $('input[name=start_time]').val(now);
             $('input[name=end_time]').val(now);
+            $('input[name=notice_day]').val('');
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
@@ -31,6 +32,7 @@ $(document).ready(function () {
             $('input[name=end_time]').val(data.end._i);
             $('input[name=bg_color]').val(data.color);
             $('input[name=text_color]').val(data.textColor);
+            $('input[name=notice_day]').val(notice_day_l[data._id])
             $('#EditEventModal').modal();
         }
     });
@@ -93,6 +95,7 @@ $(document).ready(function () {
                     color: bg_color,
                     textColor: text_color,
                 });
+                notice_day_l[res.id.toString()] = notice_day;
                 $('#EditEventModal').modal('toggle');
             },
             error: function (res) {
