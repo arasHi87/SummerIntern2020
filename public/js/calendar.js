@@ -7,6 +7,8 @@ $(document).ready(function () {
             right: 'prev, next, today',
         },
         dayClick: function(data, event, view) {
+            $('#event_edit_submit').attr("disabled", false);
+            $('#delete_event').attr("disabled", false);
             $('h5').text('Add event');
             $('#delete_event').hide();
             $('input[name=start_time]').val(data._d);
@@ -14,6 +16,8 @@ $(document).ready(function () {
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
+            $('#event_edit_submit').attr("disabled", false);
+            $('#delete_event').attr("disabled", false);
             $('h5').text('Update event')
             $('#delete_event').show();
             $('input[name=event_id]').val(data._id);
@@ -27,6 +31,7 @@ $(document).ready(function () {
     });
 
     $('#event_edit_submit').on('click', function () {
+        $(this).attr("disabled", true);
         var event_id = '';
         var title = $('input[name=title]').val();
         var start_time = $('input[name=start_time]').val();
@@ -89,6 +94,8 @@ $(document).ready(function () {
     });
 
     $("#delete_event").on('click', function () {
+        $(this).attr("disabled", true);
+        $("#event_edit_submit").attr("disabled", true);
         var event_id = $('input[name=event_id]').val()
 
         $.ajaxSetup({
