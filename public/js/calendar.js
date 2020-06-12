@@ -7,12 +7,17 @@ $(document).ready(function () {
             right: 'prev, next, today',
         },
         dayClick: function(data, event, view) {
+            var date = new Date(data._i);
+            var now =  date.getFullYear()
+                       + '-'+ ("0" + (date.getMonth() + 1)).slice(-2)
+                       + '-' + ("0" + date.getDate()).slice(-2);
+
             $('#event_edit_submit').attr("disabled", false);
             $('#delete_event').attr("disabled", false);
             $('h5').text('Add event');
             $('#delete_event').hide();
-            $('input[name=start_time]').val(data._d);
-            $('input[name=end_time]').val(data._d)
+            $('input[name=start_time]').val(now);
+            $('input[name=end_time]').val(now);
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
