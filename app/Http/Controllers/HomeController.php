@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $events = User::find(Auth::id())->events;
+        $results = User::find(Auth::id())->events;
+        $events = array();
+
+        foreach ($results as $result) {
+            $result['notice_day'] = Redis::get("events_" . Auth::id() . ':' . $result['id']);
+            array_push($events, $result);
+        }
+
         return view('home', compact('events'));
     }
 }
