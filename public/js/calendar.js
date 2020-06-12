@@ -47,6 +47,15 @@ $(document).ready(function () {
         var edit_type = $('h5').text();
         var url ='';
 
+        if (start_time === end_time) {
+            // end time need +1, or event will broken
+            d_l = end_time.split('-')
+
+            end_time = d_l[0]
+                       + '-' + d_l[1]
+                       + '-' + ('0' + (parseInt(d_l[2]) + 1).toString()).slice(-2)
+        }
+
         if (edit_type == 'Add event')
             url = '/event/add';
         else {
