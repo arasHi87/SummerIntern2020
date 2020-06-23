@@ -88,7 +88,10 @@ class EventController extends Controller
         // insert notice day to redis queue
         if ($notice_day_type) {
             $notice_day = $this->dateConvert($notice_day_type, $start_time);
-            Redis::set('events_' . Auth::id() . ':' . $event->id, $notice_day);
+
+            if (date('Y-m-d') <= $notice_day) {
+                Redis::set('events_' . Auth::id() . ':' . $event->id, $notice_day);
+            }
         }
 
         return response()->json(array(
@@ -138,9 +141,11 @@ class EventController extends Controller
         // insert notice day to redis queue
         if ($notice_day_type) {
             $notice_day = $this->dateConvert($notice_day_type, $start_time);
-            Redis::set('events_' . Auth::id() . ':' . $event_id, $notice_day);
-        }
 
+            if (date('Y-m-d') <= $notice_day) {
+                Redis::set('events_' . Auth::id() . ':' . $event_id, $notice_day);
+            }
+        }
 
         return response()->json(array(
             'success' => true,
