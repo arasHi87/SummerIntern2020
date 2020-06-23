@@ -49,11 +49,27 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label for="notice_day_type_lb" class="col-md-3 col-form-label text-md-left">notice</label>
+                    <div class="col-md-8">
+                        <select class="custom-select" id="notice_day_type">
+                            <option value="0">Null</option>
+                            <option value="1">On the day</option>
+                            <option value="2">Before 1 day</option>
+                            <option value="3">Before 2 days</option>
+                            <option value="4">Before 3 days</option>
+                            <option value="5">Before 1 week</option>
+                            <option value="6">Before 2 weeks</option>
+                            <option value="7">Before 3 weeks</option>
+                            <option value="8">Before 1 month</option>
+                        </select>
+                    </div>
+                </div>
+                {{-- <div class="form-group row">
                     <label for="notice_day_lb" class="col-md-3 col-form-label text-md-left">notice</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="notice_day" placeholder="range 1-30">
                     </div>
-                </div>
+                </div> --}}
                 <div class="form-group row">
                     <label for="bg_color" class="col-md-3 col-form-label text-md-left">bg color</label>
                     <div class="col-md-8">
@@ -93,7 +109,7 @@
         $(document).ready(function () {
             waitUntil('FullCalendar', () => {
                 @foreach($events as $event)
-                    notice_day_l["{{ strval($event->id) }}"] = "{{ $event->notice_day }}";
+                    notice_day_l["{{ strval($event->id) }}"] = "{{ $event->notice_day_type }}";
 
                     $('#calendar').fullCalendar('renderEvent', {
                             _id: "{{ strval($event->id) }}",

@@ -18,7 +18,7 @@ $(document).ready(function () {
             $('#delete_event').hide();
             $('input[name=start_time]').val(now);
             $('input[name=end_time]').val(now);
-            $('input[name=notice_day]').val('');
+            $('#notice_day_type').val(0);
             $('#EditEventModal').modal();
         },
         eventClick: function(data, event, view) {
@@ -32,7 +32,7 @@ $(document).ready(function () {
             $('input[name=end_time]').val(data.end._i);
             $('input[name=bg_color]').val(data.color);
             $('input[name=text_color]').val(data.textColor);
-            $('input[name=notice_day]').val(notice_day_l[data._id])
+            $('#notice_day_type').val(notice_day_l[data._id])
             $('#EditEventModal').modal();
         }
     });
@@ -45,7 +45,8 @@ $(document).ready(function () {
         var end_time = $('input[name=end_time]').val();
         var bg_color = $('input[name=bg_color]').val();
         var text_color = $('input[name=text_color]').val();
-        var notice_day = $('input[name=notice_day]').val();
+        var notice_day_type = $('#notice_day_type').val();
+        console.log(notice_day_type);
         var edit_type = $('h5').text();
         var url ='';
 
@@ -81,7 +82,7 @@ $(document).ready(function () {
                 end_time: end_time,
                 bg_color: bg_color,
                 text_color: text_color,
-                notice_day: notice_day,
+                notice_day_type: notice_day_type,
             },
             success: function (res) {
                 if (edit_type == 'Update event') {
@@ -95,7 +96,7 @@ $(document).ready(function () {
                     color: bg_color,
                     textColor: text_color,
                 });
-                notice_day_l[res.id.toString()] = notice_day;
+                notice_day_l[res.id.toString()] = notice_day_type;
                 $('#EditEventModal').modal('toggle');
             },
             error: function (res) {

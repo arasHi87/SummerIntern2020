@@ -17,13 +17,46 @@ class EventController extends Controller
     {
         $this->middleware('auth');
     }
+
+    private function dateConvert($notice_day_type, $now_date)
+    {
+        switch ($notice_day_type) {
+            case 1:
+                $count = 0;
+                break;
+            case 2:
+                $count = 1;
+                break;
+            case 3:
+                $count = 2;
+                break;
+            case 4:
+                $count = 3;
+                break;
+            case 5:
+                $count = 7;
+                break;
+            case 6:
+                $count = 14;
+                break;
+            case 7:
+                $count = 21;
+                break;
+            case 8:
+                $count = 31;
+                break;
+        }
+
+        return date('Y-m-d', strtotime("$now_date -$count day"));
+    }
+
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'max:50'],
-            'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
-            'notice_day' => ['nullable', 'int', 'min:0', 'max:30'],
+            'start_time' => ['required', 'date_format:Y-m-d'],
+            'notice_day_type' => ['nullable', 'int', 'min:0', 'max:8'],
         ]);
 
         if ($validator->fails()) {
@@ -32,18 +65,29 @@ class EventController extends Controller
             ), 400);
         }
 
+        // get val
+        $user_id = Auth::id();
+        $title = $request->input('title');
+        $start_time = $request->input('start_time');
+        $end_time = $request->input('end_time');
+        $text_color = $request->input('text_color');
+        $bg_color = $request->input('bg_color');
+        $notice_day_type = (int)$request->input('notice_day_type');
+
+        // insert val
         $event = new Event;
-        $event->user_id = Auth::id();
-        $event->title = $request->input('title');
-        $event->start_time = $request->input('start_time');
-        $event->end_time = $request->input('end_time');
-        $event->text_color = $request->input('text_color') ? $request->input('text_color') : '#FFFFFF';
-        $event->bg_color = $request->input('bg_color') ? $request->input('bg_color') : '#F44336';
+        $event->user_id = $user_id;
+        $event->title = $title;
+        $event->start_time = $start_time;
+        $event->end_time = $end_time;
+        $event->text_color = $text_color ? $text_color : '#FFFFFF';
+        $event->bg_color = $bg_color ? $bg_color : '#F44336';
+        $event->notice_day_type = $notice_day_type;
         $event->save();
 
-        $notice_day = $request->input('notice_day');
-
-        if ($notice_day) {
+        // insert notice day to redis queue
+        if ($notice_day_type) {
+            $notice_day = $this->dateConvert($notice_day_type, $start_time);
             Redis::set('events_' . Auth::id() . ':' . $event->id, $notice_day);
         }
 
@@ -60,7 +104,7 @@ class EventController extends Controller
             'title' => ['required', 'max:50'],
             'start_time' => ['required', 'date_format:Y-m-d'],
             'end_time' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time'],
-            'notice_day' => ['nullable', 'int', 'min:0', 'max:30'],
+            'notice_day_type' => ['nullable', 'int', 'min:0', 'max:8'],
         ]);
 
         if ($validator->fails()) {
@@ -69,21 +113,34 @@ class EventController extends Controller
             ), 400);
         }
 
-        Event::where('id', (int)$request->input('event_id'))
-            ->where('user_id', Auth::id())
+        // get val
+        $event_id = (int)$request->input('event_id');
+        $user_id = Auth::id();
+        $title = $request->input('title');
+        $start_time = $request->input('start_time');
+        $end_time = $request->input('end_time');
+        $text_color = $request->input('text_color');
+        $bg_color = $request->input('bg_color');
+        $notice_day_type = (int) $request->input('notice_day_type');
+
+        // update val
+        Event::where('id', $event_id)
+            ->where('user_id', $user_id)
             ->update([
-                'title' => $request->input('title'),
-                'start_time' => $request->input('start_time'),
-                'end_time' => $request->input('end_time'),
-                'bg_color' => $request->input('bg_color') ? $request->input('bg_color') : '#FFFFFF',
-                'text_color' => $request->input('text_color') ? $request->input('text_color') : '#F44336',
+                'title' => $title,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'text_color' => $text_color ? $text_color : '#F44336',
+                'bg_color' => $bg_color ? $bg_color : '#FFFFFF',
+                'notice_day_type' => $notice_day_type,
             ]);
 
-        $notice_day = $request->input('notice_day');
-
-        if ($notice_day) {
-            Redis::set('events_' . Auth::id() . ':' . $request->input('event_id'), $notice_day);
+        // insert notice day to redis queue
+        if ($notice_day_type) {
+            $notice_day = $this->dateConvert($notice_day_type, $start_time);
+            Redis::set('events_' . Auth::id() . ':' . $event_id, $notice_day);
         }
+
 
         return response()->json(array(
             'success' => true,
