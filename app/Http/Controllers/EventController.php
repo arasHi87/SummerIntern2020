@@ -90,7 +90,7 @@ class EventController extends Controller
             $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
             if (date('Y-m-d') <= $notice_day) {
-                Redis::set('events_' . Auth::id() . ':' . $event->id, $notice_day);
+                Redis::sadd('event_' . $notice_day, $event->id . ':' . $user_id);
             }
         }
 
@@ -143,7 +143,7 @@ class EventController extends Controller
             $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
             if (date('Y-m-d') <= $notice_day) {
-                Redis::set('events_' . Auth::id() . ':' . $event_id, $notice_day);
+                Redis::sadd('event_' . $notice_day, $event_id . ':' . $user_id);
             }
         }
 
