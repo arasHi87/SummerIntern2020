@@ -45,6 +45,8 @@ class EventController extends Controller
             case 8:
                 $count = 31;
                 break;
+            default:
+                return Null;
         }
 
         return date('Y-m-d', strtotime("$now_date -$count day"));
@@ -73,6 +75,7 @@ class EventController extends Controller
         $text_color = $request->input('text_color');
         $bg_color = $request->input('bg_color');
         $notice_day_type = (int)$request->input('notice_day_type');
+        $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
         // insert val
         $event = new Event;
@@ -83,16 +86,17 @@ class EventController extends Controller
         $event->text_color = $text_color ? $text_color : '#FFFFFF';
         $event->bg_color = $bg_color ? $bg_color : '#F44336';
         $event->notice_day_type = $notice_day_type;
+        $event->notice_day = $notice_day;
         $event->save();
 
         // insert notice day to redis queue
-        if ($notice_day_type) {
-            $notice_day = $this->dateConvert($notice_day_type, $start_time);
+        // if ($notice_day_type) {
+        //     $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
-            if (date('Y-m-d') <= $notice_day) {
-                Redis::sadd('event_' . $notice_day, $event->id . ':' . $user_id);
-            }
-        }
+        //     if (date('Y-m-d') <= $notice_day) {
+        //         Redis::sadd('event_' . $notice_day, $event->id . ':' . $user_id);
+        //     }
+        // }
 
         return response()->json(array(
             'success' => true,
@@ -125,6 +129,7 @@ class EventController extends Controller
         $text_color = $request->input('text_color');
         $bg_color = $request->input('bg_color');
         $notice_day_type = (int) $request->input('notice_day_type');
+        $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
         // update val
         Event::where('id', $event_id)
@@ -136,16 +141,17 @@ class EventController extends Controller
                 'text_color' => $text_color ? $text_color : '#F44336',
                 'bg_color' => $bg_color ? $bg_color : '#FFFFFF',
                 'notice_day_type' => $notice_day_type,
+                'notice_day' => $notice_day,
             ]);
 
         // insert notice day to redis queue
-        if ($notice_day_type) {
-            $notice_day = $this->dateConvert($notice_day_type, $start_time);
+        // if ($notice_day_type) {
+        //     $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
-            if (date('Y-m-d') <= $notice_day) {
-                Redis::sadd('event_' . $notice_day, $event_id . ':' . $user_id);
-            }
-        }
+        //     if (date('Y-m-d') <= $notice_day) {
+        //         Redis::sadd('event_' . $notice_day, $event_id . ':' . $user_id);
+        //     }
+        // }
 
         return response()->json(array(
             'success' => true,
@@ -174,16 +180,16 @@ class EventController extends Controller
             ), 400);
         }
 
-        $event_id = $event['id'];
-        $user_id = $event['user_id'];
-        $start_time = $event['start_time'];
-        $notice_day_type = $event['notice_day_type'];
-        $notice_day = $this->dateConvert($notice_day_type, $start_time);
+        // $event_id = $event['id'];
+        // $user_id = $event['user_id'];
+        // $start_time = $event['start_time'];
+        // $notice_day_type = $event['notice_day_type'];
+        // $notice_day = $this->dateConvert($notice_day_type, $start_time);
 
         $event->delete();
 
         // delete redis notice
-        Redis::srem('event_' . $notice_day, $event_id . ':' . $user_id);
+        // Redis::srem('event_' . $notice_day, $event_id . ':' . $user_id);
 
         return response()->json(array(
             'success' => true,
