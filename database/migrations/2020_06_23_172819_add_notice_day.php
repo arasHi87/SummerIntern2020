@@ -14,7 +14,8 @@ class AddNoticeDay extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->date('notice_day');
+            $table->date('notice_day')->nullable();
+            $table->bigInteger('notice_day_type');
         });
     }
 
@@ -27,6 +28,7 @@ class AddNoticeDay extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->dropColumn('notice_day');
+            $table->dropColumn('notice_day_type');
         });
     }
 }
