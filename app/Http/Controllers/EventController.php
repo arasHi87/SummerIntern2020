@@ -174,10 +174,16 @@ class EventController extends Controller
             ), 400);
         }
 
+        $event_id = $event['id'];
+        $user_id = $event['user_id'];
+        $start_time = $event['start_time'];
+        $notice_day_type = $event['notice_day_type'];
+        $notice_day = $this->dateConvert($notice_day_type, $start_time);
+
         $event->delete();
 
         // delete redis notice
-        Redis::del('events_' . Auth::id() . ':' . $request->input('event_id'));
+        Redis::srem('event_' . $notice_day, $event_id . ':' . $user_id);
 
         return response()->json(array(
             'success' => true,
