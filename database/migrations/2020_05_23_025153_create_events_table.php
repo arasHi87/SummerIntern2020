@@ -21,7 +21,6 @@ class CreateEventsTable extends Migration
             $table->date('end_time');
             $table->string('bg_color');
             $table->string('text_color');
-            $table->bigInteger('notice_day_type');
             $table->timestamps();
         });
     }
